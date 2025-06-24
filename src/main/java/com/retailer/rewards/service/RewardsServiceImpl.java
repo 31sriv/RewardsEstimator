@@ -57,8 +57,8 @@ public class RewardsServiceImpl implements RewardsService {
 
         long thirdMonthPoints = getRewardsPerMonth(
                 recentTransactions.stream()
-                        .filter(txn -> {
-                            LocalDateTime date = txn.getTransactionDate().toLocalDateTime();
+                        .filter(tx -> {
+                            LocalDateTime date = tx.getTransactionDate().toLocalDateTime();
                             return date.isAfter(currentDT.minusDays(90)) && date.isBefore(currentDT.minusDays(60));
                         }).collect(Collectors.toList()));
 
