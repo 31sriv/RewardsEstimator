@@ -1,8 +1,8 @@
 package com.retailer.rewards.service;
 
-import com.retailer.rewards.model.Rewards;
+import com.retailer.rewards.model.RewardResponseDto;
 
 public interface RewardsService {
 
-    public Rewards getRewardsByCustomerId(Long customerId);
+    public RewardResponseDto getRewardsByCustomerId(Long customerId);
 }

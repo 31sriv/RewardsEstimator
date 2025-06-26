@@ -6,6 +6,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "CUSTOMER")
+@Getter
+@Setter
 public class Customer {
 
     @Id

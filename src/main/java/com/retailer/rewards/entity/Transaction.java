@@ -1,7 +1,9 @@
 package com.retailer.rewards.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
@@ -10,6 +12,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Table(name = "TRANSACTION")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,6 @@ public class Transaction {
     private Timestamp transactionDate;
 
     @Column(name = "AMOUNT")
-    private double transactionAmount;
+    private int transactionAmount;
 }
 

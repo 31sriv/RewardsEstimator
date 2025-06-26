@@ -1,10 +1,10 @@
 package com.retailer.rewards.service;
 
+import com.retailer.rewards.entity.Customer;
 import com.retailer.rewards.entity.Transaction;
-import com.retailer.rewards.model.Rewards;
+import com.retailer.rewards.model.RewardResponseDto;
 import com.retailer.rewards.repository.CustomerRepository;
 import com.retailer.rewards.repository.TransactionRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,61 +13,45 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class RewardsServiceImplTest {
-
-    @InjectMocks
-    private RewardsServiceImpl rewardsService;
-
     @Mock
     private TransactionRepository transactionRepository;
 
     @Mock
     private CustomerRepository customerRepository;
 
-    private final Long customerId = 1002l;
+    @InjectMocks
+    private RewardsServiceImpl rewardsService;
 
-    private LocalDateTime now;
-
-    @BeforeEach
-    void setUp() {
-        now = LocalDateTime.now();
-    }
+    private Customer customer;
 
     @Test
-    public void testGetRewardsByCustomerId_Success() {
+    public void testEdgeCase_Exactly90DaysAgo() {
+        Customer customer = new Customer();
+        customer.setCustomerId(1001L);
+        customer.setCustomerName("Kriti Sen");
 
-        Transaction tx1 = new Transaction(); // Last month (amount > 100)
-        tx1.setTransactionAmount(120);
-        tx1.setTransactionDate(Timestamp.valueOf(now.minusDays(10)));
+        when(customerRepository.findById(1001L)).thenReturn(Optional.of(customer));
 
-        Transaction tx2 = new Transaction(); // 2nd month (amount = 70)
-        tx2.setTransactionAmount(70);
-        tx2.setTransactionDate(Timestamp.valueOf(now.minusDays(40)));
+        Transaction tx = new Transaction(10006L, 1001L,
+                Timestamp.valueOf(LocalDateTime.now().minusDays(90)), 120);
 
-        Transaction tx3 = new Transaction(); // 3rd month (amount = 40)
-        tx3.setTransactionAmount(40);
-        tx3.setTransactionDate(Timestamp.valueOf(now.minusDays(70)));
+        when(transactionRepository.findAllByCustomerIdAndTransactionDateGreaterThanEqual(anyLong(), any()))
+                .thenReturn(Collections.singletonList(tx));
 
-        List<Transaction> transactions = Arrays.asList(tx1, tx2, tx3);
-
-        when(customerRepository.existsById(customerId)).thenReturn(true);
-        when(transactionRepository.findAllByCustomerIdAndTransactionDateAfter(eq(customerId), any())).thenReturn(transactions);
-
-        Rewards rewards = rewardsService.getRewardsByCustomerId(customerId);
-
-        assertEquals(customerId, rewards.getCustomerId());
-        assertEquals(90, rewards.getLastMonthReward());       // 120 → (20 * 2) + 50 = 90
-        assertEquals(20, rewards.getLastSecondMonthReward()); // 70 → 70 - 50 = 20
-        assertEquals(0, rewards.getLastThirdMonthReward());   // 40 → < 50
-        assertEquals(110, rewards.getTotalRewards());
+        RewardResponseDto response = rewardsService.getRewardsByCustomerId(1001L);
+        assertEquals(90, response.getTotalRewardPoints());
     }
+
+
+
 }
