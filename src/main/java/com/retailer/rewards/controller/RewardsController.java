@@ -24,7 +24,6 @@ public class RewardsController {
 
     @GetMapping(value = "/{customerId}/rewards")
     public ResponseEntity<RewardResponseDto> getRewardsByCustomerId(@PathVariable("customerId") Long customerId) {
-        Customer customer = customerRepository.findByCustomerId(customerId);
         RewardResponseDto customerRewards = rewardsService.getRewardsByCustomerId(customerId);
         return new ResponseEntity<>(customerRewards, HttpStatus.OK);
     }

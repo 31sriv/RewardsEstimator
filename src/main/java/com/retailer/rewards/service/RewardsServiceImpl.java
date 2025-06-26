@@ -30,7 +30,7 @@ public class RewardsServiceImpl implements RewardsService {
     private CustomerRepository customerRepository;
 
     public RewardResponseDto getRewardsByCustomerId(Long customerId) {
-        Customer customer = customerRepository.findById(customerId)
+        Customer customer = customerRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + customerId + " not found."));
 
         LocalDateTime now = LocalDateTime.now();
@@ -45,7 +45,7 @@ public class RewardsServiceImpl implements RewardsService {
         }
 
         // Group transactions by month (e.g "Jun")
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
 
         Map<String, List<Transaction>> transactionsByMonth = recentTransactions.stream()
                 .sorted(Comparator.comparing(Transaction::getTransactionDate)) // sort by transaction date
