@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionRewardDto {
+
     private long transactionId;
     private double amount;
     private long rewardPoints;
