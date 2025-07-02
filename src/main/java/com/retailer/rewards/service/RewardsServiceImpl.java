@@ -10,6 +10,7 @@ import com.retailer.rewards.model.RewardResponseDto;
 import com.retailer.rewards.model.TransactionRewardDto;
 import com.retailer.rewards.repository.CustomerRepository;
 import com.retailer.rewards.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RewardsServiceImpl implements RewardsService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     public RewardResponseDto getRewardsByCustomerId(Long customerId) {
         Customer customer = customerRepository.findByCustomerId(customerId).orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + customerId + " not found."));
@@ -47,6 +47,7 @@ public class RewardsServiceImpl implements RewardsService {
         Map<String, List<Transaction>> transactionsByMonth = recentTransactions.stream().sorted(Comparator.comparing(Transaction::getTransactionDate)) // sort by transaction date
                 .collect(Collectors.groupingBy(tx -> tx.getTransactionDate().toLocalDateTime().format(formatter), LinkedHashMap::new,  // preserve the order of months
                         Collectors.toList()));
+
 
         List<MonthlyRewardDto> monthlyRewards = transactionsByMonth.entrySet().stream().map(entry -> buildMonthlyRewardDto(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 

@@ -38,14 +38,14 @@ public class RewardsServiceImplTests {
 
         // Tests reward calculation for a customer based on recent transactions
 
-        Customer customer = new Customer(1002L, "Pawan Sehgal");
-        when(customerRepository.findByCustomerId(1002L)).thenReturn(Optional.of(customer));
+        Customer customer = new Customer(1009L, "Pawan Sehgal");
+        when(customerRepository.findByCustomerId(1009L)).thenReturn(Optional.of(customer));
 
-        List<Transaction> transactions = Arrays.asList(new Transaction(10006L, 1002L, Timestamp.valueOf(LocalDateTime.now().minusDays(2)), 120), new Transaction(10007L, 1002L, Timestamp.valueOf(LocalDateTime.now().minusDays(30)), 120));
+        List<Transaction> transactions = Arrays.asList(new Transaction(10006L, 1009L, Timestamp.valueOf(LocalDateTime.now().minusDays(2)), 120), new Transaction(10007L, 1009L, Timestamp.valueOf(LocalDateTime.now().minusDays(30)), 120));
 
-        when(transactionRepository.findAllByCustomerIdAndTransactionDateGreaterThanEqual(eq(1002L), any(Timestamp.class))).thenReturn(transactions);
+        when(transactionRepository.findAllByCustomerIdAndTransactionDateGreaterThanEqual(eq(1009L), any(Timestamp.class))).thenReturn(transactions);
 
-        RewardResponseDto response = rewardsService.getRewardsByCustomerId(1002L);
+        RewardResponseDto response = rewardsService.getRewardsByCustomerId(1009L);
 
         assertEquals("Pawan Sehgal", response.getCustomerName());
         int totalTransactions = response.getMonthlyRewards().stream().mapToInt(month -> month.getTransactions().size()).sum();
