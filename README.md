@@ -11,6 +11,7 @@ A Spring Boot REST API for calculating and retrieving rewards points based on cu
 - Used Mockito , Junit library for unit testing
 - Please refer DatabaseSetupFile.pdf to configure the MySQL db settings in the Project.
 
+ [https://github.com/31sriv/RewardsEstimator/blob/main/DatabaseSetupFile.pdf](https://github.com/31sriv/RewardsEstimator/blob/main/DatabaseSetupFile.pdf)
 
 
 **Technologies Used**
@@ -23,10 +24,10 @@ A Spring Boot REST API for calculating and retrieving rewards points based on cu
 - Intellij Ide Ultimate - for development of the project
 - PostMan - for API testing
 
-**How to run the app**
+**How to run the app**<br>
 Navigate to the project folder using your terminal or cmd , then run the following command 
 
-`mvn spring-boot:run`
+   `mvn spring-boot:run`
 
 
 **API Endpoint**<br> 
