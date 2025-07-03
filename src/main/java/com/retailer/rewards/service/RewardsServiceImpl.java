@@ -11,7 +11,6 @@ import com.retailer.rewards.model.TransactionRewardDto;
 import com.retailer.rewards.repository.CustomerRepository;
 import com.retailer.rewards.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
